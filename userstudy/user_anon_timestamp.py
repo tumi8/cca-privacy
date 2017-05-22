@@ -7,7 +7,7 @@
 import sys, re
 regex = re.compile("^(\d+),(\d+),(\d+)")
 offset = int(sys.argv[2]) % 65536
-sys.stderr.write("Using offset of {}\n".format(offset))
+# sys.stderr.write("Using offset of {}\n".format(offset))  # do not document offset for published version
 with open(sys.argv[1]) as f:
     for line in f:
         line = line.strip()
@@ -15,4 +15,4 @@ with open(sys.argv[1]) as f:
         if not result:
             print("Critical: no match found in line {}".format(line))
         else:
-            print("{},{},{}".format(int(result.group(1))+offset, result.group(2), result.group(3)))
+            print("{},{},{}".format(int(result.group(1)) + offset, result.group(2), result.group(3)))

@@ -1,8 +1,11 @@
 #!/bin/bash
 
-RANDOM=`date +%N` # seeds the PRNG
+RANDOM=`date +%N` # seeds the PRNG with nanoseconds part of timestamp
 fixed_rand=$RANDOM
-for i in *ts*
+for i in *.ts *ts.daytime
 do
-    ./user_anon_timestamp.py $i $fixed_rand > $i.anon
+    if [[ -s $i ]] # check that file actually exists
+    then
+      ./user_anon_timestamp.py $i $fixed_rand > $i.anon
+    fi
 done
