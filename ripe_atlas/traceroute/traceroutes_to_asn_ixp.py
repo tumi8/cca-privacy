@@ -11,7 +11,7 @@ ixps = sys.argv[2]
 pfx2ixp = dict()
 # format: 0-1, 1-OptIX-LA, 2-Not an exchange, 3-IPv4, 4-Unicast, 5-Unknown, 6-200.61.194.0/24, 0
 # columns of interest: 1,6
-with open(ixps, 'r') as ixpfile:
+with open(ixps, 'r', encoding='utf-8') as ixpfile:
 	ixpr = csv.reader(ixpfile, delimiter=',')
 	for row in ixpr:
 		# print(row[1],row[6])
