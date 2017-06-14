@@ -1,12 +1,14 @@
 # Push Away Your Privacy: Precise User Tracking Based on TLS Client Certificate Authentication
 
-This repository contains additional information, measurement data, and tools for the paper *Push Away Your Privacy: Precise User Tracking Based on TLS Client Certificate Authentication* published at TMA 2017.
+This repository contains additional information, measurement data, and tools for the paper *Push Away Your Privacy: Precise User Tracking Based on TLS Client Certificate Authentication* published at [TMA 2017](http://tma.ifip.org/main-conference/).
 
 If you have any questions, please do not refrain from contacting one of the authors:
 
 * Matthias Wachs [lastname] @ net.in.tum.de
 * Quiring Scheitle [lastname] @ net.in.tum.de [PGP Key](https://pgp.mit.edu/pks/lookup?op=vindex&search=0xC258219436005410)
 * Georg Carle [lastname] @ net.in.tum.de
+
+If you want to reproduce our work, you might find the [TMA'17 PhD School Lab](https://github.com/quirins/tma17-ripeatlas-lab-participants) helpful, which reproduces parts of this paper.
 
 Please use OpenPGP to protect the communication!
 
