@@ -1,0 +1,24 @@
+% !TEX root = ../tls-cca-privacy.tex
+\section{Attacker and Threat Model}\label{sec:attacker}
+We define three types of attackers with different motivations and capabilities. 
+These attackers are specific points in a possible spectrum of attackers.
+
+Attacker (a) is a powerful entity interested in precisely tracking and identifying users globally.
+It is modeled after a nation state or a member of the intelligence community.
+This attacker can read network traffic of one or several large Internet backbone networks and/or Internet Exchange Points (IXPs).
+In addition, this attacker can typically coerce network operators to provide extended information about users, for example, by mapping IP addresses to network locations.
+
+Attacker (b) is a local or regional entity with access to a single large network.
+It could typically be an individual organization or company, with an interest to track roaming and usage patterns of users over different parts of the network.
+
+Attacker (c), the operator of a small network, could also enhance
+its tracking capabilities by the use of TLS client certificates, but can already
+precisely track typical counts of $<$$10$ users through device names or MAC
+addresses. We hence exclude attacker (c) from further analysis.
+
+Currently, attackers (a) or (b) typically will resort to stochastic or opportunistic ``markers'' to identify people.
+For example, in the NSA's QuantumInsert program, some markers (``realms'') used are Facebook, HotMail, or YouTube cookies as well as public static IPv4 addresses~\cite[p. 5]{effqi}.
+In contrast to the markers mentioned above, we highlight that client certificates used by TLS CCA are cryptographically unique, used by different services, rarely change over time, are wide-spread on billions of devices, and are frequently transmitted, especially when used with mobile devices and always connected services, such as mobile push notification services.
+
+We highlight that attackers (b) and (c) typically also have other possibilities of tracking users within their own networks, based on, for example, MAC addresses or, for cellular operators, IMEI identifiers.
+We also emphasize that tracking users based on TLS Client Certificates requires only passive network access, enabling attacks to be conducted (i) in a lightweight manner, and (ii) retrospectively on stored network samples.

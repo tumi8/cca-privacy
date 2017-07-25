@@ -1,0 +1,38 @@
+% !TEX root = ../tls-cca-privacy.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\begin{scaletikzpicturetowidth}{1\linewidth}
+	\begin{tikzpicture}[scale=\tikzscale]
+	\pgfdeclarelayer{bg}    % declare background layer
+	\pgfsetlayers{bg,main}
+	% Push Server
+	\draw [fill=white] (4,2) rectangle (6,0) node [pos=0.5,yshift=5] {Push} node [pos=0.5,yshift=-5] {Server};
+
+	% Phone
+	\draw [rounded corners] (9.5,0) rectangle (11.2,2) ;
+	\draw[rounded corners] (9.6,.4) rectangle (11.1,1.9);
+	\draw (10.4,.2)--(10.4,.2);
+	\draw[->,dashed](6,1) -- (9.5,1);
+
+	% Servers
+	\draw [fill=white] (0,-.5) rectangle (2.25,-1.5) node [pos=0.5] {Server C} ;
+		\draw[thick](2.25,-1) -- (4,1);
+	\draw [fill=white] (0,.5) rectangle (2.25,1.5) node [pos=0.5] {Server B} ;
+		\draw[thick](2.25,1) -- (4,1);
+	\draw [fill=white] (0,2.5) rectangle (2.25,3.5) node [pos=0.5] {Server A} ;
+		\draw[thick](2.25,3) -- (4,1);
+
+	% Apps
+	\draw [fill=white, rounded corners=2mm] (13,-.5) rectangle (15,-1.5) node [pos=0.5] { App C} ;
+			\draw[thick](11.2,1) -- (13,-1);
+	\draw [fill=white, rounded corners=2mm] (13,.5) rectangle (15,1.5) node [pos=0.5] { App B} ;
+			\draw[thick](11.2,1) -- (13,1);
+	\draw [fill=white, rounded corners=2mm] (13,2.5) rectangle (15,3.5) node [pos=0.5] { App A} ;
+			\draw[thick](11.2,1) -- (13,3);
+
+	\end{tikzpicture}
+\end{scaletikzpicturetowidth}
+%
+\caption{Push Service Architecture: Messages brokered to Apps through the Push Notification Service.}
+\label{fig:pstikz}
+\end{figure}

@@ -1,0 +1,11 @@
+% !TEX root = ../tls-cca-privacy.tex
+\begin{abstract}%
+The design and implementation of cryptographic systems offer many subtle pitfalls.
+One such pitfall is that cryptography may create unique identifiers potentially usable to repeatedly and precisely re-identify and hence track users.
+This work investigates TLS Client Certificate Authentication (CCA), which currently transmits certificates in plain text.
+We demonstrate CCA's impact on client traceability using Apple's {\apnslong} (APNs) as an example. {\apns} is used by all Apple products, employs plain-text CCA, and aims to be constantly connected to its backend.
+Its novel combination of large device count, constant connections, device proximity to users and unique client certificates provides for precise client traceability.
+We show that passive eavesdropping allows to precisely re-identify and track users and that only ten interception points are required to track more than 80 percent of {\apns} users due to global routing characteristics.
+We conduct our work under strong ethical guidelines, responsibly disclose our findings, and can confirm a working patch by Apple for the highlighted issue.
+We aim for this work to provide the necessary factual and quantified evidence about negative implications of plain-text CCA to boost deployment of encrypted CCA as in TLS 1.3.
+\end{abstract}%

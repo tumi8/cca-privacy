@@ -1,0 +1,40 @@
+% !TEX root = ../tls-cca-privacy.tex
+\section{Introduction}\label{sec:intro}
+Encryption offers a wide range of security benefits and is praised by companies to offer security to their customers~\cite{2016cook}. 
+A side-effect of cryptography can be the creation of unique cryptographic identifiers, which can, for example, be observed in TLS authentication using X.509 certificates.
+TLS, including its current version 1.2, sends server and client certificates in plain text before establishing an encrypted channel.
+Client certificates may contain sensitive user information such as users' real names.
+Even if these certificates do not leak personal information directly, the client certificates, typically valid and used for several years, establish unique markers for precise identification across repeated observations.
+In this work, we demonstrate the privacy impact of \emph{Client Certificate Authentication (CCA)} used by Apple's \emph{{\apnslong} ({\apns})}.
+With over 1 billion active Apple devices in the world~\cite{apple1bn}, of which many are used by politicians, journalists, or other high-profile groups, this service is relevant in both size and the demographics of its user base.
+As {\apns} tries to hold an active connection to its backend servers at
+all times, tracking users through this connection is promising.
+
+Unique information contained in certificates enable both local and
+global adversaries with access to network traffic to uniquely identify users,
+track them over time, and create profiles of their behavior and usage patterns.
+While existing methods based on traffic correlation or traffic markers only allow
+to identify users with a certain \textit{probability}, client certificates allow \textit{precise}
+identification of users or user devices.
+
+In this work, we demonstrate the exploitability of unique CCA identifiers leaked current TLS as used by {\apns}.
+We do so by 
+(i) using passive measurements to verify precise re-identification and traceability of certificates in a large \man, and 
+(ii) using active measurements to show that {\apns} logins are globally routed through few central networks, potentially susceptible to a powerful attacker. 
+
+Having established both feasibility and impact of this privacy leakage, we follow a responsible disclosure process and report our findings to Apple's Product Security Team. 
+In a very positive exchange, Apple confirmed our findings and its privacy implications.
+Apple has been diligently working on a patch to resolve this issue, which is included as CVE-2017-2383 in the iOS 10.2.1 and macOS 10.12.3 security updates released on January 23, 2017~\cite{ios1021}.
+
+We see the main contributions of our work in:
+\begin{itemize}
+	\item Measuring evidence on the privacy and traceability impacts of clear-text CCA
+	\item Proving that a powerful global adversary may easily and passively leverage CCA to track users globally
+	\item Following through the disclosure and patch process to protect the large {\apns} user base from this vulnerability
+\end{itemize}
+We aim for this example to be taken seriously by other applications using TLS CCA, and hope to boost the deployment of encrypted CCA through several strategies, including TLS 1.3, discussed in this paper. 
+
+We structure our work as follows: 
+We give background in Section~\ref{sec:background} and discuss related work in Section~\ref{sec:related}.
+We define the attacker model in Section~\ref{sec:attacker}, followed by passive TLS CCA observations in Section~\ref{sec:verloc}, and a dissection of {\apns}'s global routing in Section~\ref{sec:routing}. 
+We discuss our findings and their disclosure in Section~\ref{sec:disclosure}, before concluding our work in Section~\ref{sec:summary}.

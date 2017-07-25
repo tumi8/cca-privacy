@@ -1,0 +1,30 @@
+% !TEX root = ../tls-cca-privacy.tex
+\section{Discussion}%
+\label{sec:discussion}
+%
+While negative privacy implications of clear-text certificate transmission in the TLS handshake have been publicly discussed before, the impact of clear-text CCA has never before been empirically quantified against a specific and realistic threat model.
+This might have been one of the reasons why remediation of this problem was not a priority in the many years of TLS usage and has been delayed to the major rehaul of the TLS handshake with TLS 1.3.
+
+With this work, we provide evidence that clear-text TLS CCA may have crucial impact on user privacy.
+Based on empirical measurements, we show that this impact is easily abusable by the attackers defined in our threat model.
+We follow a responsible disclosure approach and find Apple to assess our insights and their implications severe enough to start immediate and expedited patch development for billions of affected devices.
+
+\textbf{Generalization of Results: }%
+With our passive measurements taking place at one specific WLAN and wired network, the question arises whether its results generalize to a more heterogeneous network that also includes cellular connections and accompanying Carrier-Grade NATs (CGNs) or other middleboxes.
+We strongly argue that our results generalize to those networks.
+For geographical tracking of users through passive observations of {\apns} handshakes, the network operator must be able to infer a user location based on externally visible properties of the handshake, typically the source IP address.
+We argue that operators of all kinds of networks will have this capability, as it is typically required by law in most countries to resolve abuse and other inquiries.
+This capability also enables a global adversary to locate users precisely: By coercing local network operators to pin-point users based on their public IP address, powerful global adversaries can leverage TLS CCA to globally and precisely track users.
+Even without such a collaboration CCA-based tracking is useful for an attacker, as often not the precise geographical location is required by the attacker, but a more coarse localization is sufficient, for example, if a user visited a particular country or region. 
+Such an approximate localization can still be obtained with approaches such as CGNs in place.
+Aside from limited geographical accuracy, an attacker can still learn about user behavior and
+infer usage patterns from temporal correlation.
+
+\textbf{Remediation Strategies: }%
+We consider the elimination of clear-text TLS CCA from current applications an important vector to enhance privacy in networked systems and discuss several strategies for doing so:
+First and foremost, the use of TLS 1.3 is likely the preferred way for most applications. However, TLS 1.3 standardization is not finished to date, and roll-out to a critical mass of devices may take several years.
+To mitigate the impact, applications might look to reduce the frequency of TLS CCA submissions by aggressively leveraging TLS session resumption. However, TLS session tickets might by themselves create identifiable patterns.
+In a short-term strategy, applications may delay the client certificate submission to the encrypted application layer, but this requires major implementation effort on client and server side.
+Therefore, this approach may only be feasible in centralized architectures such as {\apns}.
+Also, changes to a username/password approach may be feasible, but usually come with usability downsides.
+Another strategy to reduce the number of observable TLS CCA transmissions, as already employed by {\apns}, is the prioritized use of long-lived and stable networks (e..g, cellular links) over typically transient wired and WLAN connections.

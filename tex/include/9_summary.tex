@@ -1,0 +1,43 @@
+% !TEX root = ../tls-cca-privacy.tex
+\section{Conclusion and Future Work}\label{sec:summary}
+With this work we present---to the best of our knowledge---the first qualitative and
+quantitative assessment of CCA privacy implications.
+We document the use of TLS Client Certificate Authentication (CCA) by Apple's
+Push Notification Service (\apns). As TLS transmits clients certificates in
+clear text, the frequent logins of devices at the {\apns} backend provide
+opportunity for precise user tracking through highly unique cryptographic
+properties of client certificates. We validate our claim by a 17-day passive
+capturing at the uplink of a major scientific network where we can spot and
+track more than 56,000 {\apns} certificates. We demonstrate how certificate information is suited to
+track individual users and derive device information. To display that this
+tracking technique would be feasible for a powerful eavesdropper, we show
+through global measurements that access to only 10 networks may provide
+opportunity to track {\apns} users in over 80\% of access networks, both globally
+and nationally.
+We highlight that we do not foremost see this as a vulnerability of \apns, but rather a weakness in the TLS 1.2 protocol, and strongly support the
+encrypted transmission of client certificates in TLS~1.3.
+We hope that the quantification of impact in this study helps to accelerate the adoption of TLS 1.3.
+
+\textbf{Data Release: }
+In~\cite{reproduc2017}, we outline our aim for repeatable, replicable and reproducible research as defined by ACM~\cite{AcmArtifacts}.
+With ethics-driven exceptions discussed below, we publish all data and source code used to create this publication under \\ 
+\centerline{\texttt{\url{https://github.com/tumi8/cca-privacy}}}
+This includes code to create data-driven figures, which is also referenced as a clickable hyperlink for each data-driven figure in this work. 
+As discussed in Section~\ref{sec:ethical}, we can not provide the passively captured {\apns} certificates for ethical reasons.
+However, we publish selected captures that highlight the issues and its solution. 
+For figures that build on private data, we provide anonymized datasets.
+In addition to our published data, our RIPE Atlas measurements will also be long-term accessible through RIPE Atlas. 
+
+\textbf{Future Work: }%
+We plan to further quantify the impact of our research by periodically measuring the amount of clear-text TLS CCA observable, and, specifically, the distribution of fixed {\apns} versions.
+Also, the adoption of TLS 1.3 raises interesting and quantifiable questions.
+Furthermore, the leakage of sensitive information through unencrypted TLS extensions may be an interesting research field.
+Finally, we consider the identification of cryptographically unique identifiers in other authentication protocols an important research goal.
+
+\textbf{Acknowledgments: }
+We thank the Leibniz Supercomputing Centre (LRZ) of the Bavarian Academy of
+Sciences (BAdW) for their support in conducting our verification. We thank
+Apple's Security Team for the good and trustful collaboration, their valuable feedback, and their efforts
+to improve security and privacy on the Internet.
+This work has been supported by the German Federal Ministry of Education
+and Research, project X-CHECK, grant 16KIS0530.

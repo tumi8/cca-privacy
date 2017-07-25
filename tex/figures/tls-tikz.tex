@@ -1,0 +1,62 @@
+% !TEX root = ../tls-cca-privacy.tex
+\begin{figure}
+\begin{subfigure}{0.48\textwidth}
+\resizebox{\textwidth}{!}{
+		\begin{tikzpicture}
+\node at ([yshift=.1cm] 0,0) [anchor=south,minimum width=1cm] {Client};
+\node at ([yshift=.1cm] 7,0) [anchor=south,minimum width=1cm] {Server};
+
+\draw[-latex,line width=1.4pt] (0,0) to (0,-4.5);
+\draw[-latex,line width=1.4pt] (7,0) to (7,-4.5);
+
+% Client Hello is first TLS message , see https://tools.ietf.org/html/rfc5246#section-7.3:
+\packet{0,-.5}{7,-.7}{\textcolor{black}{ClientHello}};
+\packet{7,-1.7}{0,-1.9}{
+		\begin{tabular}{c}
+		\textcolor{black}{ServerHello, Certificate,} \\
+		\textcolor{black}{\ldots, CertificateRequest, \ldots}
+		\end{tabular}
+	}
+
+\packet{0,-2.4}{7,-2.6}{\textcolor{black}{Certificate,\ldots , }\textcolor{TUMBlue}{\underline{\textbf{{Finished}}}}};
+\packet{7,-3.1}{0,-3.3}{\textcolor{TUMBlue}{\underline{\textbf{{Finished}}}}};
+\dpacket{7,-3.9}{0,-3.9}{\textcolor{TUMBlue}{\underline{\textbf{{[Application Data]}}}}};
+
+		\end{tikzpicture}
+	} % end resizebox
+
+\caption{TLS 1.2 Handshake}
+\label{fig:tls12tikz}
+\end{subfigure}
+\quad
+\begin{subfigure}{0.48\textwidth}
+\resizebox{\textwidth}{!}{
+	\begin{tikzpicture}
+
+	\node at ([yshift=.1cm] 0,0) [anchor=south,minimum width=1cm] {Client};
+	\node at ([yshift=.1cm] 7,0) [anchor=south,minimum width=1cm] {Server};
+
+	\draw[-latex,line width=1.4pt] (0,0) to (0,-4.5);
+	\draw[-latex,line width=1.4pt] (7,0)  to (7,-4.5);
+	% Details: https://tlswg.github.io/tls13-spec/#rfc.section.2
+	\packet{0,-0.5}{7,-0.7}{\textcolor{black}{ClientHello}}
+	\packet{7,-2.2}{0,-2.4}{
+		\begin{tabular}{c}
+
+		\textcolor{black}{ServerHello},\\ 
+		\textcolor{TUMBlue}{\underline{\textbf{\ldots, Certificate, CertificateRequest,}}} \\ 
+		\textcolor{TUMBlue}{\underline{\textbf{\ldots, Finished, [Application\,Data]}}} 
+		\end{tabular}
+	};
+
+	\packet{0,-3.1}{7,-3.3}{\textcolor{TUMBlue}{\underline{\textbf{{Certificate, \ldots, Finished, [Application Data]}}}}} ;
+	\dpacket{7,-3.8}{0,-3.8}{\textcolor{TUMBlue}{\underline{\textbf{{[Application Data]}}}}};
+
+	\end{tikzpicture}
+}
+\caption{TLS 1.3 Handshake}
+\label{fig:tls13tikz}
+\end{subfigure}\\
+\caption{Handshakes in TLS\,1.2 and TLS\,1.3 (draft), highlighting unencrypted and \textcolor{TUMBlue}{\underline{\textbf{encrypted}}} data. Both client and server certificates are encrypted in TLS\,1.3.}
+\vspace{-1em}
+\end{figure}

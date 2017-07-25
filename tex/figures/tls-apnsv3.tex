@@ -1,0 +1,28 @@
+% !TEX root = ../tls-cca-privacy.tex
+\begin{figure}
+        \resizebox{\columnwidth}{!}{
+                \begin{tikzpicture}
+                \node at ([yshift=.1cm] 0,0) [anchor=south,minimum width=1cm] {Client};
+                \node at ([yshift=.1cm] 7,0) [anchor=south,minimum width=1cm] {Server};
+                
+                \draw[-latex,line width=1.4pt] (0,0) to (0,-4.5);
+                \draw[-latex,line width=1.4pt] (7,0) to (7,-4.5);
+                
+                \packet{0,-.5}{7,-.7}{\textcolor{black}{ClientHello}};
+                \packet{7,-1.7}{0,-1.9}{
+                        \begin{tabular}{c}
+                        \textcolor{black}{ServerHello, Certificate,} \\
+                        \textcolor{black}{Server Key Exchange}
+                        \end{tabular}
+                }
+                
+                \packet{0,-2.4}{7,-2.6}{\textcolor{black}{Client Key Exchange, Change Cipher Spec}};
+                \packet{7,-3.1}{0,-3.3}{Change Cipher Spec};
+                \dpacket{7,-3.9}{0,-3.9}{\textcolor{TUMBlue}{\underline{\textbf{{[Application Data]}}}}};
+                
+                \end{tikzpicture}
+       } % end resizebox
+        \caption{Improved \apns v3 using TLS1.2, postponing CCA into the \textcolor{TUMBlue}{\underline{\textbf{encrypted}}} Application Layer Data Exchange}
+        \label{fig:apnsv3}
+        \vspace{-1.25em}
+\end{figure}

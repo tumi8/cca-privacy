@@ -1,0 +1,12 @@
+% !TEX root = ../tls-cca-privacy.tex
+\section{Responsible Disclosure \& Mitigation}%
+\label{sec:disclosure}
+We disclosed the privacy issues of CCA-based {\apns} authentication to Apple's Product Security Team in October 2016.
+Apple's Product Security Team reacted within a day and quickly acknowledged this issue and its severity.
+Apple immediately started patch development and held contact with us through several calls to solve this issue and allow us to test the proposed fix.
+
+Despite the complexity of developing and testing this fix in iOS, macOS, iTunes for Windows, and the {\apns} server infrastructure, the patch was already included in the public iOS and macOS security updates released in January 2017.
+We tested the patch using the public beta on macOS 10.12.3 Beta 4 (16D30a) and iOS 10.2.1 Beta 4 (14D27).
+We find the issue discussed in this paper resolved through a changed usage of TLS 1.2, moving the client authentication into the encrypted Application Layer Data Exchange, as depicted in Figure~\ref{fig:apnsv3}.
+The improved version is indicated in the \emph{ClientHello} message with an Application Layer Protocol Negotiation (ALPN) Next Protocol \emph{apns-security-v3} (opposed to \emph{apns-security-v2} for the version with the vulnerability described in this paper).
+\input{figures/tls-apnsv3.tex}

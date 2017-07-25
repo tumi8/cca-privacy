@@ -1,0 +1,57 @@
+% !TEX root = ../tls-cca-privacy.tex
+\section{Related Work}
+\label{sec:related}
+
+To the best of our knowledge, only limited work on the privacy
+implications of digital certificates with a particular focus on 
+certificate-based client authentication exists. In particular, no assessment of
+real world implications of CCA exists.
+
+Parsovs~\cite{parsovs14clientauth} gives an extensive overview of operational problems
+related to TLS CCA. He rather addresses implementation details than general privacy implications, but also highlights that
+client certificates should not be transmitted in clear text.
+He mentions TLS modifications proposed for standardization that ensure encrypted transport of client certificates,   
+but notes that a modification of the TLS standard would take years to be adopted.
+He explores how renegotiation, as a possible workaround for an encrypted transmission of client certificates, has a negative impact on performance. 
+%
+Aura and Ellison~\cite{Aura00privacyand} analyze privacy implications of
+certificates and certificate systems in detail, and highlight identity leakage and
+unique keys as main issues with certificates. The authors describe several
+anonymity techniques such as key-oriented access control and certificate reduction
+as solutions to these problems, and how the SDSI PKI, a distributed PKI proposed by 
+Rivest and Lampson in~\cite{RivestSDSI}, leverages
+these techniques. For X.509, these approaches were never adopted.
+
+Chung et al.~\cite{chung2016measuring} recently tracked over 5M devices for more than one year by actively scanning for invalid X.509 certificates.
+In contrast to our study, active scans can not discover TLS client certificates.
+Also, they rather find servers, such as home routers or storage devices, than mobile client devices. 
+
+In an Internet-Draft~\cite{TLSencRay}, Ray highlights the issues of
+TLS's unencrypted handshake and its implications with the goal to extend TLS
+with an encrypted handshake. Ray proposes to establish a secure connection first 
+by exchanging (EC)DH parameters and only then to transmit 
+certificates using a second \emph{ClientHello} and \emph{ServerHello} command. 
+The draft expired in May 2012 without being adopted.
+
+Langley authored an Internet-Draft~\cite{TLSencLangley} aiming to extend the TLS handshake
+with an encrypted certificate. He proposes to first establish an encrypted
+connection using the \emph{ChangeCipherSpec} command and only exchange certificates after this step. This approach introduces incompatibilities into the TLS protocol. The draft was not adopted and expired in April 2012. 
+
+In literature, unique identifiers and certificate based authentication in particular are long known to create issues for user privacy.
+Nonetheless, neither were these issues addressed in the TLS standard up to TLS 1.2,  
+nor was the current TLS 1.2 standard modified, nor was one of the suggested approaches adopted to counteract this issue.
+%
+While TLS 1.3 addresses this problem, full adoption of TLS 1.3 by services and clients will take a long time with user privacy being at risk. 
+To the best of our knowledge, no scientific work tried to analyze or quantify the impacts of CCA on user privacy and the possibility for user tracking, especially in combination with always-connected mobile personal devices. 
+
+Besides cryptographic traceability, unique device identifiers have attracted privacy concerns and mitigation actions: 
+Mobile devices used to be well traceable through WLAN MAC addresses. 
+This was mitigated years ago by Apple and other vendors by
+offering random MAC addresses to unknown networks~\cite{vanhoef2016mac}, 
+though not always effectively, as recent work indicates~\cite{martin2017study}.
+With IPv6, stateless autoconfiguration calculates an IPv6 address based on the 
+network interface's MAC address, with the threat of global traceability of devices.
+To protect against such tracking, IPv6 privacy extensions~(cf. RFC~4941) randomly select IPv6 addresses.
+
+There exists a large body of work on tracking users through DNS~\cite{krishnan2010dns}, Mobile Apps~\cite{recon16}, Browser Fingerprinting~\cite{acar2014web} and many other means.
+We consider these approaches different from ours in that they are either (i) stochastic, i.e., not leveraging cryptographically unique fingerprints, or (ii) active, i.e., requiring attacker capabilities beyond listening.

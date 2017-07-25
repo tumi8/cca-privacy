@@ -1,0 +1,22 @@
+% !TEX root = ../tls-cca-privacy.tex
+\section{Global Routing of APNS}\label{sec:routing}
+In this chapter we investigate whether a powerful attacker, as described as attacker (a) in Section~\ref{sec:attacker}, can effectively track individual users by eavesdropping on central Autonomous Systems (ASes) or Internet Exchange Points (IXPs).
+
+Based on Apple's documentation~\cite{2016appleapnstrouble} and confirmed by measurement, we establish that (i) {\apns} uses IP addresses from the \textit{17.0.0.0/8} prefix and (ii) devices resolve one of \textit{[1-50]-courier.push.apple.com} to connect to an individual {\apns} server.
+We globally resolve those DNS names through RIPE Atlas and find them to redirect, based on resolver location, into several regional Akamai clusters (located in Apple's \textit{17.0.0.0/8} IP range), featuring a total of 69 subnets of size /24.
+In the next step, we randomly pick one of the observed IP addresses in each of the 69 /24 subnets, resulting in 69 measurement targets.
+We then conduct in-protocol (using TCP/5223) \textit{traceroute} measurements towards each of the 69 targets, selecting 1000 random globally distributed probes for each measurement.
+Over all 69 global traceroute measurements, we use a total of 1959 RIPE Atlas probes, located in 1115 ASes  and 115 countries (according to probe properties).
+Using traiXroute~\cite{nomikos2016traixroute} and CAIDA's AS mappings~\cite{caidapfx2as}, we map the IP addresses observed on the \textit{traceroute} paths to IXPs and ASes.
+Next, for every IXP or AS, we count the number of \textit{traceroute} measurements that it is present in.
+We also conduct these steps on a German subset of {\apns} servers and RIPE Atlas probes to compare global and nation-centric views.
+\input{tables/trrt-top10.tex}
+
+The top 10 ASes and IXPs for both global and nation-centric views are shown in Table~\ref{tab:topnetworks}.
+Table~\ref{tab:topnetworks} confirms that eavesdropping capabilities in just 10 ASes or IXPs will allow an attacker to eavesdrop over 80\% of our traces.
+
+One might question whether our methodology of using 1959 RIPE Atlas probes is a fair sample of the global {\apns} user population.
+We argue that as RIPE Atlas probes are generally well distributed across countries and networks (unlike, for example, PlanetLab's focus on academic networks), a large random sample of RIPE Atlas probes represents a fair approximation of global Internet traffic sources.
+Furthermore, we are not aware of any reason to assume that the {\apns} population is significantly different from typical Internet traffic sources.
+
+Based on this we consider the hypothesis of our inquiry, that an attacker with access to few core networks can track users across many access networks, holds true even against possible distortions from a sample bias.

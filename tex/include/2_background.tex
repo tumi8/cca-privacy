@@ -1,0 +1,138 @@
+% !TEX root = ../tls-cca-privacy.tex
+\section{Background}\label{sec:background}
+This section gives background on TLS and CCA, push notification services in general, and {\apns} and its employment of TLS CCA in particular.
+%
+\subsection{TLS \& Certificate-Based Authentication}\label{sec:tls}
+%
+Transport Layer Security (TLS)---often mistakenly still called SSL---is the de facto standard to establish secure communication between systems on today's Internet.
+The most noticeable benefit of TLS is that it allows to provide secure communications without modifying or impacting higher-layer protocols.
+The latest version 1.2 of TLS is defined in RFC\,5246. %
+The first draft of TLS\,1.3~\cite{ietf-tls-rfc5246-bis-16} was published in 2014 but standardization is still work in progress.
+TLS provides mechanisms to authenticate both the destination (server) and the initiator (client) of a connection.
+
+The following explanation focuses on authentication and certificate-related aspects of the TLS 1.2 handshake. 
+When a client establishes a TLS connection, it first sends a \textit{ClientHello} message, containing the cryptographic ciphers
+supported by the client and other information. 
+The server responds with a \textit{ServerHello} followed by a \textit{Certificate} message containing one or more certificates to authenticate the server. 
+In addition, the server can request a certificate from the client by sending a \textit{CertificateRequest} message. 
+This message may include a list of desired Certificate Authorities (CAs) supported for validation. 
+The client responds with a \textit{Certificate} message containing the client's certificate chain. 
+Only after this unencrypted mutual authentication, both partners establish the desired secure channel. 
+A TLS 1.2 mutual authentication is depicted in Figure~\ref{fig:tls12tikz}.
+
+\input{figures/tls-tikz.tex}
+
+For authentication, TLS relies on X.509v3 certificates~(cf. RFC\,5280),
+asserting that a cryptographic public key belongs to the certificate's \emph{subject},
+making certificates identifiable and attributable to users or devices.
+Certificate validation is performed by the system receiving the certificate. 
+Validation is performed according to the system's requirements, i.e., the systems do not have to use publicly verifiable certificates issued by well-known certificate authorities but can instead rely on private CA infrastructures.
+
+The current draft for TLS 1.3~\cite{ietf-tls-rfc5246-bis-16} proposes a
+different handshake protocol with the specific security goal to protect the
+endpoints' identities. First of all, a shared secret is established between
+client and server to protect against passive attackers. The client first sends a
+\textit{ClientHello} message containing an (EC)DHE key share. The server
+responds with a \textit{ServerHello} message containing its key share used to
+compute the shared secret. After such a shared secret is established and
+communication is encrypted, the server provides the client with its certificate
+in the \textit{Certificate} message. Only after sending its certificate, it can
+request a client certificate sending a \textit{CertificateRequest} message.
+This approach protects both the server and client certificate from observation. 
+The proposed handshake for TLS 1.3 is depicted in Figure~\ref{fig:tls13tikz}.
+It is important to note that TLS 1.3 can still leak sensitive information since the \textit{ClientHello} (containing the TLS extensions) is still unencrypted. 
+These TLS extensions can, for example, leak the target hostname through the \textit{Server Name Indication (SNI)} \textit{ClientHello} extension.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Use Cases for Client Certificate Authentication}
+
+TLS in combination with CCA is used in a large
+variety of settings, especially when mutual authentication of communication
+partners is essential. 
+Where passwords are considered insufficient, CCA can provide a level of multi-factor authentication, as recommended by OWASP~\cite{OwaspCCA}.
+
+On network level, CCA can be used with network access control and virtual private
+network authentication. One prominent example is enterprise (wireless) network
+authentication using 802.1x in combination with the \emph{Extensible Authentication
+Protocol (EAP)} (cf. RFC\,5247). EAP is an extensible authentication framework
+and supports certificate-based mutual authentication with EAP-TLS (cf. RFC\,5216).
+TLS CCA is also used with OpenVPN~\cite{OpenVpn}, one of the most widely used solutions
+to create virtual private networks (VPN). OpenVPN uses a custom security
+protocol based on shared keys or TLS. In TLS mode, OpenVPN employs X.509
+certificates for mutual authentication.
+
+With HTTPS, TLS can be used to authenticate both the web site and the user.
+Popular web servers such as Apache, NGINX, and IIS support authentication using CCA.
+Websites do not widely use CCA as it is complex for users to install and maintain certificates across multiple devices and browsers.
+
+{\noindent}TLS and CCA are also employed for higher-layer applications such as MQTT (cf. ISO/IEC PRF 20922), a lightweight messaging protocol designed for the ``Internet of Things''. 
+MQTT can use TLS and CCA for client authentication, but provides no means to authenticate the server.
+
+\subsection{Push Notification Services}
+
+\textit{Push Notification Services ({\pnses})} are an essential functionality of modern
+service ecosystems. 
+{\pnses} provide a resource efficient approach for service backends to notify (mobile) devices and applications about
+events. 
+{\pnses} originate from mobile platforms where resources like energy and network access are limited.
+%
+All modern mobile platforms are equipped with {\pnses}, often tightly integrated with the operating system: 
+Apple's {\apns} on iOS, Firebase Cloud Messaging (FCM) on Google's Android, and Windows Notification Service (WNS) on Windows Phone are prominent examples. 
+{\pnses} became the most prominent way to notify applications about service events. 
+{\pnses} are also integrated with desktop operating systems and even web browsers (e.g., Google FCM in Chrome) to efficiently notify applications about service events. 
+This makes {\pnses} an omnipresent, inevitable link between applications, devices, and service and infrastructure backends. 
+Figure~\ref{fig:pstikz} displays this basic concept of {\pnses}.
+\input{figures/push-services-alt.tex}
+
+When establishing a connection to the {\pns}, both the device and the
+third party provider have to authenticate to the service. While for third party
+provider, authentication approaches like OAuth are used, device authentication is
+not documented for most services due to their proprietary architecture and
+tight integration with the operating system. Only Apple documents the use
+of TLS and CCA with its security guide~\cite{IosSecurityGuide} and {\apns} documentation~\cite{2016appleapns}.
+We investigate communication for Google's FCM and Microsoft's WNS, but do not
+find plain-text client certificates. Google's FCM uses TLS 1.2 and TCP ports 5228 through
+5230 to connect to its backend. In our analysis for FCM, no
+unencrypted client certificates were transmitted with the handshake. The same applies
+to Microsoft's WNS, which uses TCP port 443 and TLS 1.2. 
+
+\subsection{{\apnslong} ({\apns})}
+\label{sec:apns}
+% CONSISTENCY: The current Mac operating system is macOS, originally named "Mac OS X" until 2012 and then "OS X" until 2016.[3] 
+%
+Within Apple's ecosystem, \apns is a key service for the communication between Apple's service backend and user devices and applications. 
+{\apns} was added to mobile devices with iOS 3.0 in 2009, and extended macOS platforms with the release of Mac OS X 10.7 in 2011. 
+{\apns} and CCA is also used with \itunes on Windows 7 and later. 
+Support for website notifications in Apple's Safari browser was added with the release of Mac OS X 10.9 in 2013.
+
+On its initial activation, each Apple device is provided with a private cryptographic key and a X.509
+certificate, stored in the device keychain.
+With \itunes, the certificate is created when logging in with
+an Apple ID and is stored in Window's certificate store. Mutual authentication
+is performed when the device connects to {\apns}: Using TLS 1.2 with CCA as
+described in Section~\ref{sec:tls}, first the server's certificate is validated
+by the device. Next, the device sends its client certificate, which is validated
+by {\apns} to establish a mutually trusted connection~\cite{2016appleapns}.
+
+For \textit{device-to-push-service} communication, {\apns} uses two different TCP
+ports~\cite{2016appleapnstrouble}: By default the device tries to connect to an
+{\apns} server on TCP port 5223. If TCP port 5223 is not reachable (e.g., due to
+port filtering), {\apns} connects to TCP port 443 on WLAN only.
+% 
+When connected to both cellular and WLAN or wired networks, {\apns} prefers cellular data
+links over WLAN or wired connections~\cite{2016appleapnstrouble}. 
+We assume this reduces reconnects and provides a stable link for mobile users.
+
+For its backend, {\apns} employs a load balancing architecture, where
+devices connect to one of 50 {\apns} DNS records named
+\textit{{[1-50]-courier.push.apple.com}}~\cite{2016appleapnstrouble}. 
+These names are served by Akamai's DNS service and mapped to
+\textit{{[1-50]\-.courier\--push\--apple\-.com\-.akadns\-.net}}
+using CNAME records. 
+These resolve to a geographically close name, for example, 
+\textit{{pop\--eur\--central\--courier\-.push\--apple\-.com\-.akadns\-.net}}
+when resolved from Munich. 
+These names resolve to a variety of IP addresses in Apple's 17.0.0.0/24 address range.
+%

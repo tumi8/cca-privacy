@@ -1,0 +1,105 @@
+\documentclass[10pt,final,conference,letterpaper]{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage[bookmarks=false]{hyperref} % bookmarks=false required by IEEE upload
+\usepackage{flushend} % to equalize length of 2 last cols
+\usepackage{xcolor,color,colortbl,graphicx,tabularx}
+\usepackage{amssymb, pifont}
+\newcommand{\xmark}{\ding{55}}
+\usepackage{etoolbox}
+\usepackage[para]{threeparttable}
+\usepackage{pgfplots}
+\usepackage{multirow}
+\usepackage{xspace}
+\usepackage{cite}
+\usepackage[acronym]{glossaries}
+\usepackage{booktabs}
+\usepackage{todonotes}
+\presetkeys%
+{todonotes}%
+{inline,}{}
+\usepackage{comment}
+
+\usepackage{nicefrac}
+\usepackage{xfrac}
+\usepackage{subfloat}
+\usepackage{subcaption}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,shadows}
+\usepackage{amsmath,bm,times}
+\usepackage{environ}
+\usepackage{tumcolor}
+\usepackage{textgreek}
+
+\usepackage[group-minimum-digits=3,group-separator={,}]{siunitx}
+
+\makeatletter
+\newsavebox{\measure@tikzpicture}
+\NewEnviron{scaletikzpicturetowidth}[1]{%
+	\def\tikz@width{#1}%
+	\def\tikzscale{1}\begin{lrbox}{\measure@tikzpicture}%
+		\BODY
+	\end{lrbox}%
+	\pgfmathparse{#1/\wd\measure@tikzpicture}%
+	\edef\tikzscale{\pgfmathresult}%
+	\BODY
+}
+
+\newcommand{\apnslong}{Apple Push Notification service\xspace}
+\newcommand{\apns}{APNs\xspace}
+\newcommand{\pns}{PNS\xspace}
+\newcommand{\pnses}{PNSes\xspace}
+\newcommand{\man}{metropolitan area network\xspace}
+\newcommand{\mans}{metropolitan area network\xspace}
+\newcommand{\itunes}{iTunes\xspace}
+
+\newcommand{\packet}[3]{
+	\draw[-latex,line width=0.7pt] (#1) to node[above,sloped]{\normalsize{{#3}}} (#2);}
+
+\newcommand{\dpacket}[3]{
+	\draw[latex-latex,line width=0.7pt] (#1) to node[above,sloped]{\normalsize{{#3}}} (#2);}
+
+\hyphenation{para-digms}
+\hyphenation{para-digm}
+\hyphenation{meas-ure-ment}
+\hyphenation{meas-ure-ment-ba-sed}
+\hyphenation{a-ca-de-mi-a}
+\hyphenation{GeoNames}
+
+\urlstyle{same}
+
+\title{Push Away Your Privacy: Precise User Tracking Based on TLS Client Certificate Authentication}
+
+
+\author{\IEEEauthorblockN{Matthias Wachs, Quirin Scheitle, Georg Carle}
+	Chair of Network Architectures and Services\\
+	\IEEEauthorblockA{Technical University of Munich (TUM)\\
+	Email: \{wachs,scheitle,carle\}@net.in.tum.de}
+}
+
+% TMA page limit: 8 pages in IEEE 2-column style, plus an additional page for references.
+\begin{document}
+
+\maketitle              % typeset the title of the contribution
+\input{include/0_abstract.tex}
+\input{include/1_intro.tex}
+\input{include/2_background.tex}
+\input{include/3_relatedwork.tex}
+\input{include/4_attacker.tex}
+\input{include/5_passive_man.tex}
+\input{include/6_active_globalrouting.tex}
+\input{include/7_disclosure.tex}
+\input{include/8_discussion.tex}
+\input{include/9_summary.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% fixes for bibtex layout according to http://tex.stackexchange.com/questions/10924/underfull-hbox-in-bibliography
+\apptocmd{\sloppy}{\hbadness 10000\relax}{}{}
+\apptocmd{\thebibliography}{\raggedright}{}{}
+\bibliography{ref}
+%\bibliographystyle{unsrt}
+% this shortens authors names
+\bibliographystyle{abbrv}
+
+\end{document}
